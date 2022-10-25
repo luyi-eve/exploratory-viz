@@ -1,5 +1,4 @@
-﻿county_id,clinic_id,median,mean,max,min,"hotels number
-(price available)"
+﻿county_id,clinic_id,median,mean,max,min,available_hotels_number
 Leon,id_01,100,106,355,40,53
 Leon,id_02,99,106,355,45,65
 Alachua,id_03,124,138,283,72,16
