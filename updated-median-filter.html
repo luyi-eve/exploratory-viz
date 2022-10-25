@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>median filter test </title>
+
+  </head>
+
+  <body>
+   
+    <label>
+        Filter by Median Price:
+        <select id="selectMedian">
+            <option>any</option>
+            <option value="100">Price lower than $100</option>
+            <option value="100-150">Price between $100 ~ $150</option>
+            <option value="150">Price higher than $150</option>
+        </select>
+    </label>
+
+    <ul id="list">
+     
+    </ul>
+
+
+    <!--Import d3.j3 library-->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <script>
+
+        let numbers = [20, 40, 17, 99, 59, 77];
+        let filteredNumbers = numbers.filter(
+            function (number) {
+                return number > 20;
+            }
+        );
+
+        console.log(filteredNumbers); // [40,99,59,77]
+
+
+    
+    let medianCost = [
+    {
+        county_id: "LEON",
+        clinic_id: "id_01",
+        median: 100,
+        mean: 106,
+        max: 355,
+        min: 40
+    },
+    {
+        county_id: "LEON",
+        clinic_id: "id_02",
+        median: 99,
+        mean: 106,
+        max: 355,
+        min: 45
+    },
+    {
+        county_id: "ALACHUA",
+        clinic_id: "id_03",
+        median: 124,
+        mean: 138,
+        max: 283,
+        min: 72
+    },
+    {
+        county_id: "ALACHUA",
+        clinic_id: "id_04",
+        median: 105,
+        mean: 122,
+        max: 283,
+        min: 59
+    },
+    {
+        county_id: "DUVAL",
+        clinic_id: "id_05",
+        median: 90,
+        mean: 104,
+        max: 212,
+        min: 47
+    },
+    {
+        county_id: "DUVAL",
+        clinic_id: "id_06",
+        median: 92,
+        mean: 107,
+        max: 212,
+        min: 47
+    },
+    {
+        county_id: "DUVAL",
+        clinic_id: "id_07",
+        median: 90,
+        mean: 102,
+        max: 212,
+        min: 47
+    },
+    {
+        county_id: "DUVAL",
+        clinic_id: "id_08",
+        median: 78,
+        mean: 88,
+        max: 194,
+        min: 56
+    },
+    {
+        county_id: "ORANGE",
+        clinic_id: "id_09",
+        median: 110,
+        mean: 109,
+        max: 204,
+        min: 60
+    },
+    {
+        county_id: "OSCEOLA",
+        clinic_id: "id_10",
+        median: 65,
+        mean: 70,
+        max: 144,
+        min: 30
+    },
+    {
+        county_id: "POLK",
+        clinic_id: "id_11",
+        median: 109,
+        mean: 110,
+        max: 200,
+        min: 61
+    },
+    {
+        county_id: "SEMINOLE",
+        clinic_id: "id_12",
+        median: 80,
+        mean: 101,
+        max: 220,
+        min: 47
+    },
+    {
+        county_id: "HILLSBOROUGH",
+        clinic_id: "id_13",
+        median: 112,
+        mean: 129,
+        max: 297,
+        min: 75
+    },
+    {
+        county_id: "HILLSBOROUGH",
+        clinic_id: "id_14",
+
+        median: 159,
+        mean: 180,
+        max: 454,
+        min: 64
+    },
+    {
+        county_id: "HILLSBOROUGH",
+        clinic_id: "id_15",
+
+        median: 102,
+        mean: 121,
+        max: 296,
+        min: 69
+    },
+    {
+        county_id: "HILLSBOROUGH",
+        clinic_id: "id_16",
+
+        median: 107,
+        mean: 128,
+        max: 297,
+        min: 75
+    },
+    {
+        county_id: "HILLSBOROUGH",
+        clinic_id: "id_17",
+
+        median: 143,
+        mean: 179,
+        max: 509,
+        min: 63
+    },
+    {
+        county_id: "HILLSBOROUGH",
+        clinic_id: "id_18",
+
+        median: 121,
+        mean: 135,
+        max: 345,
+        min: 57
+    },
+    {
+        county_id: "PINELLAS",
+        clinic_id: "id_19",
+
+        median: 153,
+        mean: 161,
+        max: 405,
+        min: 69
+    },
+    {
+        county_id: "PINELLAS",
+        clinic_id: "id_20",
+
+        median: 105,
+        mean: 118,
+        max: 196,
+        min: 69
+    },
+    {
+        county_id: "PINELLAS",
+        clinic_id: "id_21",
+
+        median: 117,
+        mean: 156,
+        max: 699,
+        min: 60
+    },
+    {
+        county_id: "PINELLAS",
+        clinic_id: "id_22",
+
+        median: 117,
+        mean: 141,
+        max: 874,
+        min: 60
+    },
+    {
+        county_id: "PINELLAS",
+        clinic_id: "id_23",
+
+        median: 120,
+        mean: 158,
+        max: 699,
+        min: 63
+    },
+    {
+        county_id: "SARASOTA",
+        clinic_id: "id_24",
+
+        median: 223,
+        mean: 265,
+        max: 959,
+        min: 98
+    },
+    {
+        county_id: "SARASOTA",
+        clinic_id: "id_25",
+
+        median: 178,
+        mean: 231,
+        max: 607,
+        min: 61
+    },
+    {
+        county_id: "BROWARD",
+        clinic_id: "id_26",
+
+        median: 104,
+        mean: 120,
+        max: 316,
+        min: 46
+    },
+    {
+        county_id: "BROWARD",
+        clinic_id: "id_27",
+
+        median: 120,
+        mean: 124,
+        max: 212,
+        min: 45
+    },
+    {
+        county_id: "BROWARD",
+        clinic_id: "id_28",
+
+        median: 114,
+        mean: 142,
+        max: 1199,
+        min: 40
+    },
+    {
+        county_id: "BROWARD",
+        clinic_id: "id_29",
+
+        median: 109,
+        mean: 124,
+        max: 328,
+        min: 40
+    },
+    {
+        county_id: "BROWARD",
+        clinic_id: "id_30",
+
+        median: 135,
+        mean: 165,
+        max: 1119,
+        min: 31
+    },
+    {
+        county_id: "BROWARD",
+        clinic_id: "id_31",
+
+        median: 133,
+        mean: 129,
+        max: 188,
+        min: 31
+    },
+    {
+        county_id: "BROWARD",
+        clinic_id: "id_32",
+
+        median: 107,
+        mean: 114,
+        max: 316,
+        min: 49
+    },
+    {
+        county_id: "ST. LUCIE",
+        clinic_id: "id_33",
+
+        median: 103,
+        mean: 103,
+        max: 107,
+        min: 98
+    },
+    {
+        county_id: "MIAMI-DADE",
+        clinic_id: "id_34",
+
+        median: 103,
+        mean: 97,
+        max: 129,
+        min: 57
+    },
+    {
+        county_id: "MIAMI-DADE",
+        clinic_id: "id_35",
+
+        median: 102,
+        mean: 92,
+        max: 129,
+        min: 44
+    },
+    {
+        county_id: "MIAMI-DADE",
+        clinic_id: "id_36",
+
+        median: 112,
+        mean: 118,
+        max: 240,
+        min: 44
+    },
+    {
+        county_id: "MIAMI-DADE",
+        clinic_id: "id_37",
+
+        median: 133,
+        mean: 125,
+        max: 165,
+        min: 72
+    },
+    {
+        county_id: "MIAMI-DADE",
+        clinic_id: "id_38",
+
+        median: 88,
+        mean: 96,
+        max: 155,
+        min: 60
+    },
+    {
+        county_id: "MIAMI-DADE",
+        clinic_id: "id_39",
+
+        median: 127,
+        mean: 146,
+        max: 404,
+        min: 69
+    },
+    {
+        county_id: "MIAMI-DADE",
+        clinic_id: "id_40",
+
+        median: 137,
+        mean: 162,
+        max: 433,
+        min: 58
+    },
+    {
+        county_id: "MIAMI-DADE",
+        clinic_id: "id_41",
+
+        median: 155,
+        mean: 144,
+        max: 299,
+        min: 41
+    },
+    {
+        county_id: "MIAMI-DADE",
+        clinic_id: "id_42",
+
+        median: 153,
+        mean: 176,
+        max: 631,
+        min: 28
+    },
+    {
+        county_id: "MIAMI-DADE",
+        clinic_id: "id_43",
+
+        median: 118,
+        mean: 123,
+        max: 179,
+        min: 92
+    },
+    {
+        county_id: "MIAMI-DADE",
+        clinic_id: "id_44",
+
+        median: 132,
+        mean: 153,
+        max: 495,
+        min: 50
+    },
+    {
+        county_id: "MIAMI-DADE",
+        clinic_id: "id_45",
+
+        median: 138,
+        mean: 155,
+        max: 561,
+        min: 50
+    },
+    {
+        county_id: "MIAMI-DADE",
+        clinic_id: "id_46",
+
+        median: 119,
+        mean: 120,
+        max: 206,
+        min: 41
+    },
+    {
+        county_id: "MIAMI-DADE",
+        clinic_id: "id_47",
+
+        median: 166,
+        mean: 283,
+        max: 2821,
+        min: 41
+    },
+    {
+        county_id: "MIAMI-DADE",
+        clinic_id: "id_48",
+
+        median: 152,
+        mean: 276,
+        max: 2821,
+        min: 41
+    },
+    {
+        county_id: "PALM BEACH",
+        clinic_id: "id_49",
+
+        median: 135,
+        mean: 135,
+        max: 138,
+        min: 131
+    },
+    {
+        county_id: "PALM BEACH",
+        clinic_id: "id_50",
+
+        median: 181,
+        mean: 186,
+        max: 494,
+        min: 76
+    },
+    {
+        county_id: "PALM BEACH",
+        clinic_id: "id_51",
+
+        median: 181,
+        mean: 189,
+        max: 494,
+        min: 76
+    },
+    {
+        county_id: "ST. LUCIE",
+        clinic_id: "id_52",
+
+        median: 96,
+        mean: 104,
+        max: 189,
+        min: 56
+    },
+    {
+        county_id: "LEE",
+        clinic_id: "id_53",
+
+        median: 123,
+        mean: 128,
+        max: 259,
+        min: 69
+    },
+    {
+        county_id: "MIAMI-DADE",
+        clinic_id: "id_54",
+
+        median: 124,
+        mean: 124,
+        max: 179,
+        min: 95
+    }
+]
+
+    let rows =[]
+
+    function show(filteredRows){
+        list.textContent= " "; // clear the list
+
+        for (let row of filteredRows) { 
+          let item = document.createElement("li"); // document here works with html file and wiz createElement functionn, it will create <li> elements for me (it won't show up in your html codes but it will show up on your page)
+          item.textContent = row.clinic_id + " at " + row.county_id
+          list.append(item);
+        }
+
+        if ( filteredRows.length == 0) {
+          alert("No match ;/")
+        }
+      }
+
+    function filtering(){
+        let filtered = []; //create an empty list to duplicate what I want by filter
+
+        /*WHEN SELECT "ANY", SHOW EVERYTHING ON THE PAGE 
+        if (selectMedian.value == "any"){ // if select "any" in dropdown box
+        show(rows);//show everything 
+        console.log(rows)
+        return; //stop execution of this function
+        }*/
+
+        /* BUT: how to hide everything when selecting "any"???? */
+
+        for (let row of rows){
+            if (selectMedian.value == "100"){ // if select "100" in dropdown box
+                if(row.median < 100){filtered.push(row);} 
+                // find out all the median prices that are below 100 & add them to the new list "filtered"
+            }
+            if (selectMedian.value == "100-150"){ // if select "100-150" in dropdown box
+                if(row.median >= 100 && row.median <=150 ){filtered.push(row);}
+                // find out all the median prices that are between 100 and 150 & add them to the new list "filtered"
+            }
+            if (selectMedian.value == "150"){ // if select "150" in dropdown box
+                if(row.median > 150){filtered.push(row);}
+                // find out all the median prices that are above 150 & add them to the new list "filtered"
+            } 
+         } 
+
+        console.log(filtered); 
+        show(filtered)
+    }
+
+    selectMedian.onchange = filtering;
+    
+    async function loadData(){ 
+        rows = await medianCost; 
+        show(rows);
+    }
+
+    loadData();
+  
+        
+    </script>
+
+  </body>
